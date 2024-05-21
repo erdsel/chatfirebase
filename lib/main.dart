@@ -1,34 +1,62 @@
+import 'package:chatfirebase/pages/home_page.dart';
 import 'package:chatfirebase/pages/login.dart';
+import 'package:chatfirebase/pages/login_page.dart';
+import 'package:chatfirebase/pages/splash_screen.dart';
+import 'package:chatfirebase/providers/authentication_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:get/get.dart';
-import 'firebase_options.dart';
-import 'theme_controller.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+
+import 'package:provider/provider.dart';
+
+//Services
+import './services/navigation_service.dart';
+
+
+
+//Pages
+
+
+void main() {
+  runApp(
+    SplashPage(
+      key: UniqueKey(),
+      onInitializationComplete: () {
+        runApp(
+          MainApp(),
+        );
+      },
+    ),
   );
-  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeController = Get.put(ThemeController());
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthenticationProvider>(
+          create: (BuildContext _context) {
+            return AuthenticationProvider();
+          },
+        )
+      ],
+      child: MaterialApp(
+        title: 'Chatify',
+        theme: ThemeData(
+          backgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
+          scaffoldBackgroundColor: Color.fromRGBO(36, 35, 49, 1.0),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: Color.fromRGBO(30, 29, 37, 1.0),
+          ),
+        ),
+        navigatorKey: NavigationService.navigatorKey,
+        initialRoute: '/login',
+        routes: {
+          '/login': (BuildContext _context) => LoginPage(),
+          '/home': (BuildContext _context) => HomePage(),
 
-    return Obx(() => GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        },
       ),
-      darkTheme: ThemeData.dark(),
-      themeMode: themeController.theme,
-      home: LoginPage(),
-    ));
+    );
   }
 }
