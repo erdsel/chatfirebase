@@ -120,5 +120,24 @@ class DatabaseService {
     } catch (e) {
       print(e);
     }
+    return null;
+  }
+  Future<String> getUserSymmetricKey(String _uid) async {
+    try {
+      DocumentSnapshot snapshot = await _db.collection('Users').doc(_uid).get();
+      if (snapshot.exists) {
+        var data = snapshot.data() as Map<String, dynamic>; // Tür dönüşümü yapılıyor
+        if (data.containsKey('symmetric_key')) {
+          return data['symmetric_key']; // Şimdi bu kullanım geçerli
+        } else {
+          throw Exception('Symmetric key not found for user');
+        }
+      } else {
+        throw Exception('User not found');
+      }
+    } catch (e) {
+      print('Error retrieving user symmetric key: $e');
+      throw e;
+    }
   }
 }

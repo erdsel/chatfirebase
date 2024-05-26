@@ -1,5 +1,6 @@
 //Packages
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -23,25 +24,28 @@ class AuthenticationProvider extends ChangeNotifier {
     _navigationService = GetIt.instance.get<NavigationService>();
     _databaseService = GetIt.instance.get<DatabaseService>();
 
-    _auth.authStateChanges().listen((_user) {
+    _auth.authStateChanges().listen((_user) async {
       if (_user != null) {
         _databaseService.updateUserLastSeenTime(_user.uid);
-        _databaseService.getUser(_user.uid).then(
-              (_snapshot) {
-            Map<String, dynamic> _userData =
-            _snapshot.data()! as Map<String, dynamic>;
-            user = ChatUser.fromJSON(
-              {
-                "uid": _user.uid,
-                "name": _userData["name"],
-                "email": _userData["email"],
-                "last_active": _userData["last_active"],
-                "image": _userData["image"],
-              },
-            );
-            _navigationService.removeAndNavigateToRoute('/home');
-          },
-        );
+        try {
+          DocumentSnapshot _snapshot = await _databaseService.getUser(_user.uid);
+          Map<String, dynamic> _userData = _snapshot.data()! as Map<String, dynamic>;
+          String symmetric_key = await _databaseService.getUserSymmetricKey(_user.uid);
+
+          user = ChatUser.fromJSON({
+            "uid": _user.uid,
+            "name": _userData["name"],
+            "email": _userData["email"],
+            "last_active": _userData["last_active"],
+            "image": _userData["image"],
+            "symmetric_key": symmetric_key
+          });
+
+          _navigationService.removeAndNavigateToRoute('/home');
+        } catch (e) {
+          print("Error handling user data or fetching symmetric key: $e");
+          // Optionally handle error by navigating to an error page or displaying a message
+        }
       } else {
         if (_navigationService.getCurrentRoute() != '/login') {
           _navigationService.removeAndNavigateToRoute('/login');
@@ -49,6 +53,7 @@ class AuthenticationProvider extends ChangeNotifier {
       }
     });
   }
+
 
   Future<void> loginUsingEmailAndPassword(
       String _email, String _password) async {

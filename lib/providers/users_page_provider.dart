@@ -17,6 +17,9 @@ import '../models/chat.dart';
 //Pages
 import '../pages/chat_page.dart';
 
+
+
+
 class UsersPageProvider extends ChangeNotifier {
   AuthenticationProvider _auth;
 
@@ -46,9 +49,9 @@ class UsersPageProvider extends ChangeNotifier {
     _selectedUsers = [];
     try {
       _database.getUsers(name: name).then(
-        (_snapshot) {
+            (_snapshot) {
           users = _snapshot.docs.map(
-            (_doc) {
+                (_doc) {
               Map<String, dynamic> _data = _doc.data() as Map<String, dynamic>;
               _data["uid"] = _doc.id;
               return ChatUser.fromJSON(_data);
@@ -76,7 +79,7 @@ class UsersPageProvider extends ChangeNotifier {
     try {
       //Create Chat
       List<String> _membersIds =
-          _selectedUsers.map((_user) => _user.uid).toList();
+      _selectedUsers.map((_user) => _user.uid).toList();
       _membersIds.add(_auth.user.uid);
       bool _isGroup = _selectedUsers.length > 1;
       DocumentReference? _doc = await _database.createChat(
@@ -91,7 +94,7 @@ class UsersPageProvider extends ChangeNotifier {
       for (var _uid in _membersIds) {
         DocumentSnapshot _userSnapshot = await _database.getUser(_uid);
         Map<String, dynamic> _userData =
-            _userSnapshot.data() as Map<String, dynamic>;
+        _userSnapshot.data() as Map<String, dynamic>;
         _userData["uid"] = _userSnapshot.id;
         _members.add(
           ChatUser.fromJSON(
@@ -116,4 +119,8 @@ class UsersPageProvider extends ChangeNotifier {
       print(e);
     }
   }
+
+
+
+
 }

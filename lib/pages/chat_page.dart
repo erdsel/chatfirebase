@@ -1,4 +1,5 @@
 //Packages
+import 'package:chatfirebase/models/chat_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -110,51 +111,47 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _messagesListView() {
-    if (_pageProvider.messages != null) {
-      if (_pageProvider.messages!.length != 0) {
-        return Container(
-          height: _deviceHeight * 0.74,
-          child: ListView.builder(
-            controller: _messagesListViewController,
-            itemCount: _pageProvider.messages!.length,
-            itemBuilder: (BuildContext _context, int _index) {
-              ChatMessage _message = _pageProvider.messages![_index];
-              bool _isOwnMessage = _message.senderID == _auth.user.uid;
-              return Container(
-                child: CustomChatListViewTile(
-                  deviceHeight: _deviceHeight,
-                  width: _deviceWidth * 0.80,
-                  message: _message,
-                  isOwnMessage: _isOwnMessage,
-                  sender: this
-                      .widget
-                      .chat
-                      .members
-                      .where((_m) => _m.uid == _message.senderID)
-                      .first,
+Widget _messagesListView() {
+  if (_pageProvider.messages != null) {
+    if (_pageProvider.messages!.length != 0) {
+      return Container(
+        height: _deviceHeight * 0.74,
+        child: ListView.builder(
+          controller: _messagesListViewController,
+          itemCount: _pageProvider.messages!.length,
+          itemBuilder: (BuildContext _context, int _index) {
+            ChatMessage _message = _pageProvider.messages![_index];
+            bool _isOwnMessage = _message.senderID == _auth.user.uid;
+
+            // Burada doğrudan orijinal mesaj içeriği kullanılıyor
+            return Container(
+              child: CustomChatListViewTile(
+                deviceHeight: _deviceHeight,
+                width: _deviceWidth * 0.80,
+                message: _message, // Şifrelenmemiş orijinal mesajı göster
+                isOwnMessage: _isOwnMessage,
+                sender: this.widget.chat.members.firstWhere(
+                  (_m) => _m.uid == _message.senderID, 
+                  orElse: () => ChatUser.empty() // Eğer kullanıcı bulunamazsa boş bir ChatUser döndür
                 ),
-              );
-            },
-          ),
-        );
-      } else {
-        return Align(
-          alignment: Alignment.center,
-          child: Text(
-            "Be the first to say Hi!",
-            style: TextStyle(color: Colors.white),
-          ),
-        );
-      }
-    } else {
-      return Center(
-        child: CircularProgressIndicator(
-          color: Colors.white,
+              ),
+            );
+          },
         ),
       );
+    } else {
+      return Align(
+        alignment: Alignment.center,
+        child: Text("Start a new chat", style: TextStyle(color: Colors.white)),
+      );
     }
+  } else {
+    return Center(child: CircularProgressIndicator(color: Colors.white));
   }
+}
+
+
+
 
   Widget _sendMessageForm() {
     return Container(

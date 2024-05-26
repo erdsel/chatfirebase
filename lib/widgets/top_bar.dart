@@ -10,11 +10,11 @@ class TopBar extends StatelessWidget {
   late double _deviceWidth;
 
   TopBar(
-    this._barTitle, {
-    this.primaryAction,
-    this.secondaryAction,
-    this.fontSize = 35,
-  });
+      this._barTitle, {
+        this.primaryAction,
+        this.secondaryAction,
+        this.fontSize = 35,
+      });
 
   @override
   Widget build(BuildContext context) {

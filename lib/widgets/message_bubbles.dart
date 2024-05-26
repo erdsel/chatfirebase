@@ -14,18 +14,18 @@ class TextMessageBubble extends StatelessWidget {
 
   TextMessageBubble(
       {required this.isOwnMessage,
-      required this.message,
-      required this.height,
-      required this.width});
+        required this.message,
+        required this.height,
+        required this.width});
 
   @override
   Widget build(BuildContext context) {
     List<Color> _colorScheme = isOwnMessage
         ? [Color.fromRGBO(0, 136, 249, 1.0), Color.fromRGBO(0, 82, 218, 1.0)]
         : [
-            Color.fromRGBO(51, 49, 68, 1.0),
-            Color.fromRGBO(51, 49, 68, 1.0),
-          ];
+      Color.fromRGBO(51, 49, 68, 1.0),
+      Color.fromRGBO(51, 49, 68, 1.0),
+    ];
     return Container(
       height: height + (message.content.length / 20 * 6.0),
       width: width,
@@ -70,18 +70,18 @@ class ImageMessageBubble extends StatelessWidget {
 
   ImageMessageBubble(
       {required this.isOwnMessage,
-      required this.message,
-      required this.height,
-      required this.width});
+        required this.message,
+        required this.height,
+        required this.width});
 
   @override
   Widget build(BuildContext context) {
     List<Color> _colorScheme = isOwnMessage
         ? [Color.fromRGBO(0, 136, 249, 1.0), Color.fromRGBO(0, 82, 218, 1.0)]
         : [
-            Color.fromRGBO(51, 49, 68, 1.0),
-            Color.fromRGBO(51, 49, 68, 1.0),
-          ];
+      Color.fromRGBO(51, 49, 68, 1.0),
+      Color.fromRGBO(51, 49, 68, 1.0),
+    ];
     DecorationImage _image = DecorationImage(
       image: NetworkImage(message.content),
       fit: BoxFit.cover,

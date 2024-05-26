@@ -6,6 +6,7 @@ class Chat {
   final String currentUserUid;
   final bool activity;
   final bool group;
+  
   final List<ChatUser> members;
   List<ChatMessage> messages;
 

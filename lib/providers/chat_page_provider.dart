@@ -18,6 +18,8 @@ import '../providers/authentication_provider.dart';
 //Models
 import '../models/chat_message.dart';
 
+  import 'package:encrypt/encrypt.dart' as encrypt;
+
 class ChatPageProvider extends ChangeNotifier {
   late DatabaseService _db;
   late CloudStorageService _storage;
@@ -97,17 +99,46 @@ class ChatPageProvider extends ChangeNotifier {
     );
   }
 
-  void sendTextMessage() {
-    if (_message != null) {
-      ChatMessage _messageToSend = ChatMessage(
-        content: _message!,
-        type: MessageType.TEXT,
-        senderID: _auth.user.uid,
-        sentTime: DateTime.now(),
-      );
-      _db.addMessageToChat(_chatId, _messageToSend);
-    }
+// Symmetric anahtarı getiren yönlendirme metodunu ekle
+  Future<String> getSymmetricKeyForUser(String userId) {
+    return _db.getUserSymmetricKey(userId);
   }
+String encryptMessage(String plainText, String keyString) {
+    final key = encrypt.Key.fromUtf8(keyString);
+    final iv = encrypt.IV.fromLength(16);
+    final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+    final encrypted = encrypter.encrypt(plainText, iv: iv);
+    print("Original message: $plainText");
+    print("Encrypted message: ${encrypted.base64}");
+    return encrypted.base64;
+  }
+
+
+  void sendTextMessage() {
+  if (_message != null) {
+    // Mesajı şifrele
+    String encryptedMessage = encryptMessage(_message!, _auth.user.symmetric_key);
+
+    ChatMessage _messageToSend = ChatMessage(
+      content: encryptedMessage,
+      type: MessageType.TEXT,
+      senderID: _auth.user.uid,
+      sentTime: DateTime.now(),
+    );
+
+    // Şifrelenmiş mesajı veritabanına ekle
+    _db.addMessageToChat(_chatId, _messageToSend);
+  }
+}
+String decryptMessage(String encryptedText, String keyString) {
+    final key = encrypt.Key.fromUtf8(keyString);
+    final iv = encrypt.IV.fromLength(16);
+    final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+    final decrypted = encrypter.decrypt64(encryptedText, iv: iv);
+    print("Decrypted message: $decrypted");
+    return decrypted;
+  }
+
 
   void sendImageMessage() async {
     try {

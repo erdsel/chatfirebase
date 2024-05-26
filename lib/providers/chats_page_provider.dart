@@ -58,6 +58,7 @@ class ChatsPageProvider extends ChangeNotifier {
               }
               //Get Last Message For Chat
               List<ChatMessage> _messages = [];
+              
               QuerySnapshot _chatMessage =
                   await _db.getLastMessageForChat(_d.id);
               if (_chatMessage.docs.isNotEmpty) {
@@ -74,11 +75,13 @@ class ChatsPageProvider extends ChangeNotifier {
                 messages: _messages,
                 activity: _chatData["is_activity"],
                 group: _chatData["is_group"],
+                
               );
             },
           ).toList(),
         );
         notifyListeners();
+        print("Chat kısımları alınabildi.");
       });
     } catch (e) {
       print("Error getting chats.");

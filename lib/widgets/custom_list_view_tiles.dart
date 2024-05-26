@@ -1,9 +1,10 @@
 //Packages
-import 'package:chatfirebase/widgets/message_bubbles.dart';
-import 'package:chatfirebase/widgets/rounded_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+//Widgets
+import '../widgets/rounded_image.dart';
+import '../widgets/message_bubbles.dart';
 
 //Models
 import '../models/chat_message.dart';
