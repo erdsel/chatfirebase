@@ -1,16 +1,34 @@
-# chatfirebase
+# ChatFirebase Mobil Mesajlaşma Uygulaması
 
-A new Flutter project.
+ChatFirebase, Firebase destekli bir mobil mesajlaşma uygulamasıdır. Bu uygulama, Flutter ile geliştirilmiş olup, Firebase'in güçlü altyapısını kullanarak hızlı ve güvenli bir şekilde mesajlaşma imkanı sunar.
 
-## Getting Started
+## Proje Detay Resimleri
+![Proje Yapısı](image.png) 
+![Proje Yapısı](splash.png)
+![Proje Yapısı](sohbet1.png) 
+![Proje Yapısı](sohbet2.png)
 
-This project is a starting point for a Flutter application.
+## Özellikler
 
-A few resources to get you started if this is your first Flutter project:
+- Gerçek zamanlı mesajlaşma
+- Kullanıcılar arası mesajlaşmada yüksek performans ve güvenlik
+- Kolay kullanımlı arayüz
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Kullanılan Teknolojiler
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Flutter**: Uygulama geliştirme için kullanılan framework.
+- **Firebase**: Veritabanı ve kimlik doğrulama işlemleri için kullanılan platform.
+- **Provider**: Uygulama içi state yönetimi için kullanılan paket.
+- **Get_it**: Dependency injection için kullanılan paket.
+
+## Proje Yapısı
+### Dosyalar ve Klasörler
+
+- **/models**: Uygulama modellerini içerir.
+- **/pages**: Uygulamanın sayfa tasarımlarını içerir.
+- **/providers**: State yönetimi için provider yapılarını barındırır.
+- **/services**: Uygulamanın servis işlemleri, örneğin `navigation_service.dart` dosyasında navigasyon işlemleri yer alır.
+- **/widgets**: Yeniden kullanılabilir widget'lar bu klasör altında bulunur.
+- **main.dart**: Uygulamanın başlangıç noktası.
+- **firebase_options.dart**: Firebase yapılandırma dosyası.
+- **theme_controller.dart**: Tema yönetimini sağlayan dosya.
