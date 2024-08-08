@@ -7,6 +7,7 @@ ChatFirebase, Firebase destekli bir mobil mesajlaşma uygulamasıdır. Bu uygula
 ![Proje Yapısı](splash.png)
 ![Proje Yapısı](sohbet1.png) 
 ![Proje Yapısı](sohbet2.png)
+![Proje Yapısı](genel.png)
 
 ## Özellikler
 
